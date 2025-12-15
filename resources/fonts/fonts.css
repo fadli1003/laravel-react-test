@@ -1,0 +1,44 @@
+@font-face {
+    font-family: hitmo;
+    src: url(./hitmo/Hitmo2.0-Regular.ttf);
+    font-weight: 400;
+}
+@font-face {
+    font-family: hitmo;
+    src: url(./hitmo/Hitmo2.0-Bold.ttf);
+    font-weight: 700;
+}
+@font-face {
+    font-family: hitmo;
+    src: url(./hitmo/Hitmo2.0-Black.ttf);
+    font-weight: 800;
+}
+@font-face {
+    font-family: genos;
+    src: url(./Genos/Genos-VariableFont_wght.ttf);
+}
+@font-face {
+    font-family: poppins;
+    src: url(./poppins/Poppins-Regular.ttf);
+    font-weight: 400;
+}
+@font-face {
+    font-family: poppins;
+    src: url(./poppins/Poppins-Bold.ttf);
+    font-weight: 700;
+}
+@font-face {
+    font-family: poppins;
+    src: url(./poppins/Poppins-Medium.ttf);
+    font-weight: 500;
+}
+@font-face {
+    font-family: poppins;
+    src: url(./poppins/Poppins-SemiBold.ttf);
+    font-weight: 600;
+}
+@font-face {
+    font-family: poppins;
+    src: url(./poppins/Poppins-ExtraBold.ttf);
+    font-weight: 800;
+}
