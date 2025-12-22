@@ -22,6 +22,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'tenant_id',
     ];
 
     /**
@@ -48,5 +49,11 @@ class User extends Authenticatable
             'password' => 'hashed',
             'two_factor_confirmed_at' => 'datetime',
         ];
+    }
+
+    // public $foreignkey = 'tenant_id';
+    public function tenants()
+    {
+        return $this->belongsTo(Tenant::class, 'tenant_id');
     }
 }

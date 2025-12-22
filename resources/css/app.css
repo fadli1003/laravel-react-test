@@ -16,7 +16,7 @@
         'Noto Color Emoji';
     --font-poppins: poppins;
     --font-hitmo: hitmo;
-    
+
     --radius-lg: var(--radius);
     --radius-md: calc(var(--radius) - 2px);
     --radius-sm: calc(var(--radius) - 4px);
@@ -147,19 +147,19 @@
 }
 
 .table{
-    thead{
+    & thead{
         @apply dark:bg-gray-300 dark:text-gray-800 bg-slate-950 text-gray-200 capitalize;
     }
-    tbody{
+    & tbody{
         @apply dark:bg-gray-200 dark:text-gray-900 text-center bg-slate-900 text-white rounded-bl-lg;
     }
-    th, td{
+    & th, td{
         @apply py-3 px-4;
     }
-    th:last-child{
+    & th:last-child{
         @apply rounded-tr-lg;
     }
-    th:nth-child(1){
+    & th:nth-child(1){
         @apply rounded-tl-lg;
     }
     /* td:first-child{
@@ -169,4 +169,30 @@
         @apply rounded-br-lg
     } */
     @apply mt-4 w-full;
+}
+
+.tabel{
+    @apply min-w-full border text-sm rounded-lg;
+}
+.tabel thead{
+    @apply bg-slate-200 dark:bg-neutral-950 text-left;
+}
+.tabel tbody{
+    @apply bg-slate-50 dark:bg-neutral-900;
+}
+.tabel tbody tr {
+    @apply dark:hover:bg-neutral-800 hover:bg-slate-100 duration-200;
+}
+.tabel th, td{
+    @apply px-4 py-2.5;
+}
+.tabel th{
+    @apply font-semibold;
+}
+
+.table-wrapper{
+    scrollbar-width: none;
+}
+.table-wrapper:hover{
+    scrollbar-width: thin;
 }

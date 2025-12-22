@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Teacher;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -15,7 +16,7 @@ class UserController extends Controller
     public function index()
     {
         return Inertia::render('Pengguna/Index', [
-            'pengguna' => User::all(),
+            'pengguna' => User::get(['id', 'name', 'email', 'password']),
         ]);
     }
 
@@ -33,14 +34,14 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'nama' => 'required',
-            'email' => 'required|email|unique:users,email',
-            'pw' => 'required|min:6' 
+            'nama' => 'required|string|max:50',
+            'email' => 'required|max:255|email|unique:users,email',
+            'pw' => 'required|min:6'
         ]);
         $pengguna = new User();
         $pengguna->name = $request->nama;
         $pengguna->email = $request->email;
-        $pengguna->password = bcrypt($request->pw);
+        $pengguna->password = Hash::make($request->pw);
         $pengguna->save();
 
         return redirect()->route('pengguna.index')->with('sukses', 'Pengguna berhasil dibuat.');
@@ -73,7 +74,7 @@ class UserController extends Controller
         $request->validate([
             'nama' => 'required',
             'email' => 'required|email|unique:users,email'.$pengguna->id,
-            'pw' => 'required|min:6' 
+            'pw' => 'required|min:6'
         ]);
         $pengguna->name = $request->nama;
         $pengguna->email = $request->email;

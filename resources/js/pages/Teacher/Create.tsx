@@ -1,45 +1,40 @@
-import { Button } from '@/components/ui/button';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
-import { Head, useForm } from '@inertiajs/react';
+import { Head, useForm} from '@inertiajs/react';
 import { route } from 'ziggy-js';
+import { Button } from '@/components/ui/button';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'Pengguna',
-        href: '/pengguna',
+        title: 'Teacher',
+        href: route('teacher.index'),
     },
     {
-        title: 'Edit Pengguna',
-        href: '/pengguna',
-    }
+        title: 'Add Teacher',
+        href: route('teacher.create'),
+    },
 ];
-interface Pengguna {
-    id: number;
-    name: string;
-    email: string;
-}
 
-export default function Edit({pengguna}: {pengguna: Pengguna}) {
+export default function Create() {
 
-    const {data, setData, errors, put} = useForm({
+    const {data, setData,errors, post} = useForm({
         id: '',
-        nama: pengguna.name||'',
-        email: pengguna.email||'',
+        nama: '',
+        email: '',
         pw: '',
     });
-    function submit(e :React.FormEvent){
+    function submit(e: React.FormEvent){
         e.preventDefault();
-        put(route('pengguna.update', pengguna.id));
+        post(route('teacher.store'));
     }
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Buat Pengguna" />
                 <div className='py-3 px-5'>
-                    <span>Edit pengguna</span>
+                    <h2>Tambahkan pengguna</h2>
                 </div>
-                <div>
+                <div className='p-5'>
                     <form onSubmit={submit}>
                         <div className='mb-3'>
                             <label className='pl-1'>Nama</label>

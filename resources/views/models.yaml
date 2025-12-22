@@ -1,0 +1,33 @@
+pa make:model Tenant -m
+sleep(1)
+pa make:model Teacher -m
+sleep(1)
+pa make:model Student -m
+sleep(1)
+pa make:model Course -m
+sleep(1)
+pa make:model Enrollment -m
+
+pa make:controller UserController --resource
+pa make:controller TenantController --resource
+pa make:controller TeacherController --resource
+pa make:controller StudentController --resource
+pa make:controller CourseController --resource
+pa make:controller EnrollmentController --resource
+
+
+pa make:model Perusahaan -m
+sleep(1)
+pa make:model Departement -m
+sleep(1)
+pa make:model Jabatan -m
+sleep(1)
+pa make:model Karyawan -m
+sleep(1)
+pa make:model Kontrak -m
+sleep(1)
+pa make:model Payroll -m
+sleep(1)
+pa make:model Gaji -m
+sleep(1)
+pa make:model Pembayaran -m

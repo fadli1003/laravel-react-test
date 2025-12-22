@@ -26,11 +26,11 @@
             }
 
             html.dark {
-                background-color: oklch(0.145 0 0);
+                background-color: var(--color-sidebar);
             }
         </style>
 
-        <title inertia>{{ config('app.name', ' l-react test') }}</title>
+        <title inertia>{{ config('app.name', ' Multitentant School') }}</title>
 
         <link rel="icon" href="/favicon.ico" sizes="any">
         <link rel="icon" href="/favicon.svg" type="image/svg+xml">

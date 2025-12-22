@@ -17,13 +17,13 @@ const breadcrumbs: BreadcrumbItem[] = [
 
 export default function Create() {
 
-    const {data, setData,errors, post} = useForm({
+    const {data, setData, errors, post} = useForm({
         id: '',
-        nama: '',
+        name: '',
         email: '',
-        pw: '', 
+        pw: '',
     });
-    function submit(e){
+    function submit(e: React.FormEvent){
         e.preventDefault();
         post(route('pengguna.store'));
     }
@@ -32,47 +32,49 @@ export default function Create() {
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Buat Pengguna" />
                 <div className='py-3 px-5'>
-                    <h2>Tambahkan pengguna</h2>
+                    <h2 className='font-semibold text-xl'>Tambah pengguna</h2>
                 </div>
-                <div className='p-5'>
-                    <form onSubmit={submit}>
-                        <div className='mb-3'>
-                            <label className='pl-1'>Nama</label>
-                            <input 
-                              type='text' 
-                              id='name' 
-                              name='name' 
-                              placeholder='Masukkan nama lengkap'
-                              value={data.nama}
-                              onChange={(e) => setData('nama', e.target.value)}
-                              className='w-full py-1.5 px-3 rounded-lg broder-border border-1 ring-0 focus:ring-0 focus:outline-1' 
-                            />
-                            {errors.nama && <div className='text-red-500 text-sm mt-1'>{errors.nama}</div>}
+                <div className='p-5 pt-0'>
+                    <form onSubmit={submit} >
+                        <div className='grid md:grid-cols-2 space-x-2'>
+                            <div className='mb-3 flex flex-col space-y-1'>
+                                <label className='pl-1'>Nama</label>
+                                <input
+                                type='text'
+                                id='name'
+                                name='name'
+                                placeholder='Masukkan nama lengkap'
+                                value={data.name}
+                                onChange={(e) => setData('name', e.target.value)}
+                                className='w-full py-1.5 px-3 rounded-md broder-border border-1 ring-0 focus:ring-0 focus:outline-1 focus:outline-gray-300'
+                                />
+                                {errors.name && <div className='text-red-500 text-sm mt-1'>{errors.name}</div>}
+                            </div>
+                            <div className='mb-3 flex flex-col space-y-1'>
+                                <label className='pl-1'>Email</label>
+                                <input type='email'
+                                id='email'
+                                name='email'
+                                placeholder='Masukkan Email'
+                                value={data.email}
+                                onChange={(e) => setData('email', e.target.value)}
+                                className='w-full py-1.5 px-3 rounded-md broder-border border-1 ring-0 focus:ring-0 focus:outline-1 focus:outline-gray-300'
+                                />
+                                {errors.email && <div className='text-red-500 text-sm mt-1'>{errors.email}</div>}
+                            </div>
+                            <div className='mb-3 flex flex-col space-y-1'>
+                                <label className='pl-1'>Password</label>
+                                <input type='password' id='password' name='password'
+                                placeholder='Masukkan password pengguna'
+                                value={data.pw}
+                                onChange={(e) => setData('pw', e.target.value)}
+                                autoComplete='none'
+                                className='w-full py-1.5 px-3 rounded-md broder-border border-1 ring-0 focus:ring-0 focus:outline-1 focus:outline-gray-300'
+                                />
+                                {errors.pw && <div className='text-red-500 text-sm mt-1'>{errors.pw}</div>}
+                            </div>
                         </div>
-                        <div className='mb-3'>
-                            <label className='pl-1'>Email</label>
-                            <input type='email' 
-                              id='email' 
-                              name='email' 
-                              placeholder='Masukkan Email'
-                              value={data.email}
-                              onChange={(e) => setData('email', e.target.value)}
-                              className='w-full py-1.5 px-3 rounded-lg broder-border border-1 ring-0 focus:ring-0 focus:outline-1' 
-                            />
-                            {errors.email && <div className='text-red-500 text-sm mt-1'>{errors.email}</div>}
-                        </div>
-                        <div className='mb-3'>
-                            <label className='pl-1'>Password</label>
-                            <input type='password' id='password' name='password' 
-                              placeholder='Masukkan password pengguna'
-                              value={data.pw}
-                              onChange={(e) => setData('pw', e.target.value)}
-                              autoComplete='none'
-                              className='w-full py-1.5 px-3 rounded-lg broder-border border-1 ring-0 focus:ring-0 focus:outline-1' 
-                            />
-                            {errors.pw && <div className='text-red-500 text-sm mt-1'>{errors.pw}</div>}
-                        </div>
-                        <Button>Simpan</Button>
+                        <Button className='cursor-pointer mt-2'>Simpan</Button>
                     </form>
                 </div>
         </AppLayout>

@@ -68,6 +68,141 @@ declare module 'ziggy-js' {
             "required": true
         }
     ],
+    "tenant.index": [],
+    "tenant.create": [],
+    "tenant.store": [],
+    "tenant.show": [
+        {
+            "name": "tenant",
+            "required": true
+        }
+    ],
+    "tenant.edit": [
+        {
+            "name": "tenant",
+            "required": true
+        }
+    ],
+    "tenant.update": [
+        {
+            "name": "tenant",
+            "required": true
+        }
+    ],
+    "tenant.destroy": [
+        {
+            "name": "tenant",
+            "required": true
+        }
+    ],
+    "teacher.index": [],
+    "teacher.create": [],
+    "teacher.store": [],
+    "teacher.show": [
+        {
+            "name": "teacher",
+            "required": true
+        }
+    ],
+    "teacher.edit": [
+        {
+            "name": "teacher",
+            "required": true
+        }
+    ],
+    "teacher.update": [
+        {
+            "name": "teacher",
+            "required": true
+        }
+    ],
+    "teacher.destroy": [
+        {
+            "name": "teacher",
+            "required": true
+        }
+    ],
+    "student.index": [],
+    "student.create": [],
+    "student.store": [],
+    "student.show": [
+        {
+            "name": "student",
+            "required": true
+        }
+    ],
+    "student.edit": [
+        {
+            "name": "student",
+            "required": true
+        }
+    ],
+    "student.update": [
+        {
+            "name": "student",
+            "required": true
+        }
+    ],
+    "student.destroy": [
+        {
+            "name": "student",
+            "required": true
+        }
+    ],
+    "course.index": [],
+    "course.create": [],
+    "course.store": [],
+    "course.show": [
+        {
+            "name": "course",
+            "required": true
+        }
+    ],
+    "course.edit": [
+        {
+            "name": "course",
+            "required": true
+        }
+    ],
+    "course.update": [
+        {
+            "name": "course",
+            "required": true
+        }
+    ],
+    "course.destroy": [
+        {
+            "name": "course",
+            "required": true
+        }
+    ],
+    "enrollment.index": [],
+    "enrollment.create": [],
+    "enrollment.store": [],
+    "enrollment.show": [
+        {
+            "name": "enrollment",
+            "required": true
+        }
+    ],
+    "enrollment.edit": [
+        {
+            "name": "enrollment",
+            "required": true
+        }
+    ],
+    "enrollment.update": [
+        {
+            "name": "enrollment",
+            "required": true
+        }
+    ],
+    "enrollment.destroy": [
+        {
+            "name": "enrollment",
+            "required": true
+        }
+    ],
     "profile.edit": [],
     "profile.update": [],
     "profile.destroy": [],
