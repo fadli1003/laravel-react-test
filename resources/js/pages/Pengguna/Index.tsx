@@ -25,12 +25,11 @@ interface Pengguna {
     email: string;
     pw: string;
 }
-const emptyForm = {name: '', email: '', pw: '' };
+const emptyForm = { name: '', email: '', pw: '' };
 type FormState = typeof emptyForm & { id?: number };
 
-export default function Index(
+export default function Index() {
     // { pengguna }: { pengguna: Pengguna[] }
-) {
     const { pengguna } = usePage<{ pengguna?: Pengguna[] }>().props;
     const penggunaList = pengguna ?? [];
     const [form, setForm] = useState<FormState>(emptyForm);
@@ -61,10 +60,10 @@ export default function Index(
         setOpen(true);
         setIsEdit(true);
         setIsShow(false);
-    }
+    };
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setForm({ ...form, [e.target.name]: e.target.value });
-    }
+    };
 
     const handleClose = () => {
         setOpen(false);
@@ -74,43 +73,33 @@ export default function Index(
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         if (isEdit && form.id) {
-            router.put(route('pengguna.update', form.id), form, { onSuccess: handleClose });
+            router.put(route('pengguna.update', form.id), form, {
+                onSuccess: handleClose,
+            });
             alert('Informasi berhasil diperbarui');
         } else {
             alert('Terjadi kesalahan saat update data, coba ulangi lagi!');
         }
-        console.log(form)
-    }
+        console.log(form);
+    };
 
     function handelDelete(id: number) {
-        setSelectedId(id)
-        setConfirm(true)
+        setSelectedId(id);
+        setConfirm(true);
     }
     const confirmDelete = () => {
-    if (selectedId) {
-        router.delete(route('pengguna.destroy', (selectedId)));
-    }
-        setConfirm(false)
-    }
-
-    const { props } = usePage();
-    const { sukses } = props as { sukses?: string };
+        if (selectedId) {
+            router.delete(route('pengguna.destroy', selectedId));
+        }
+        setConfirm(false);
+    };
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Pengguna" />
             <Card className="relative h-full overflow-hidden rounded-t-none border-t-0 p-6">
                 <CardHeader className="mt-2 mb-4 flex flex-row justify-between px-0">
-                    <h2 className="pt-2 text-xl font-semibold">
-                        Tabel Pengguna
-                    </h2>
-                    <div className="">
-                        {sukses && (
-                            <div className="text-sm text-green-400">
-                                {sukses}
-                            </div>
-                        )}
-                    </div>
+                    <h2 className="pt-2 text-xl font-semibold">User List</h2>
                     <Link href={route('pengguna.create')}>
                         <Button className="cursor-pointer">
                             <PlusCircle />
@@ -141,7 +130,7 @@ export default function Index(
                                     <td>
                                         <div className="flex justify-center gap-3">
                                             <span
-                                                className="cursor-pointer rounded-md p-1 bg-slate-200 hover:bg-slate-300 dark:bg-slate-800 hover:dark:bg-slate-700"
+                                                className="btn-show"
                                                 onClick={() =>
                                                     handleOpenShow(pengguna)
                                                 }
@@ -149,8 +138,10 @@ export default function Index(
                                                 <Eye />
                                             </span>
                                             <span
-                                                onClick={() => handleOpenEdit(pengguna)}
-                                                className="cursor-pointer rounded-md bg-green-300 p-1 text-gray-800 duration-200 hover:bg-green-400"
+                                                onClick={() =>
+                                                    handleOpenEdit(pengguna)
+                                                }
+                                                className="btn-edit"
                                             >
                                                 <PenBox />
                                             </span>
@@ -158,7 +149,7 @@ export default function Index(
                                                 onClick={() =>
                                                     handelDelete(pengguna.id)
                                                 }
-                                                className="cursor-pointer rounded-md bg-red-600 p-1 text-gray-100 duration-200 hover:bg-red-700"
+                                                className="btn-delete"
                                             >
                                                 <Trash2 />
                                             </span>
@@ -170,11 +161,16 @@ export default function Index(
                     </table>
                 </div>
                 <Dialog open={open} onOpenChange={setOpen}>
-                    <DialogContent aria-describedby={undefined} className="absolute flex h-full w-full items-center justify-center backdrop-blur-[2px]" >
-                        <div className="max-[768px] w-[400px] min-w-[300px] translate-y-[-50px] rounded-md border bg-background py-6 px-8">
+                    <DialogContent
+                        aria-describedby={undefined}
+                        className="absolute flex h-full w-full items-center justify-center backdrop-blur-[2px]"
+                    >
+                        <div className="max-[768px] w-[400px] min-w-[300px] translate-y-[-50px] rounded-md border bg-background px-8 py-6">
                             <DialogHeader>
                                 <DialogTitle className="text-center font-semibold">
-                                   {isEdit ? 'Edit Informasi User' : 'Informasi User'}
+                                    {isEdit
+                                        ? 'Edit Informasi User'
+                                        : 'Informasi User'}
                                 </DialogTitle>
                             </DialogHeader>
                             <form onSubmit={handleSubmit} className="space-y-4">
@@ -187,7 +183,7 @@ export default function Index(
                                         onChange={handleChange}
                                         readOnly={isShow}
                                         required={isEdit}
-                                        />
+                                    />
                                 </div>
                                 <div className="flex flex-col space-y-3">
                                     <Label htmlFor="email">Email User</Label>
@@ -198,11 +194,13 @@ export default function Index(
                                         onChange={handleChange}
                                         readOnly={isShow}
                                         required={isEdit}
-                                        />
+                                    />
                                 </div>
-                                {isEdit &&
+                                {isEdit && (
                                     <div className="flex flex-col space-y-3">
-                                        <Label htmlFor="pw">User Password</Label>
+                                        <Label htmlFor="pw">
+                                            User Password
+                                        </Label>
                                         <Input
                                             id="pw"
                                             name="pw"
@@ -212,16 +210,23 @@ export default function Index(
                                             required={isEdit}
                                         />
                                     </div>
-                                }
+                                )}
                                 <div className="flex justify-end gap-3">
-                                    {isEdit && (<Button type='submit' className='cursor-pointer'>Update</Button>)}
+                                    {isEdit && (
+                                        <Button
+                                            type="submit"
+                                            className="cursor-pointer"
+                                        >
+                                            Update
+                                        </Button>
+                                    )}
                                     <Button
                                         type="button"
                                         variant="outline"
                                         onClick={handleClose}
                                         className="cursor-pointer"
                                     >
-                                       {isEdit ? 'Cancel' : 'Tutup'}
+                                        {isEdit ? 'Cancel' : 'Tutup'}
                                     </Button>
                                 </div>
                             </form>
@@ -229,7 +234,11 @@ export default function Index(
                     </DialogContent>
                 </Dialog>
             </Card>
-            <ModalKonfirmasi open={confirm} onConfirm={confirmDelete} onClose={() => setConfirm(false)} />
+            <ModalKonfirmasi
+                open={confirm}
+                onConfirm={confirmDelete}
+                onClose={() => setConfirm(false)}
+            />
         </AppLayout>
     );
 }

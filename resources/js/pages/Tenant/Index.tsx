@@ -12,7 +12,7 @@ import { Label } from '@/components/ui/label';
 import { Spinner } from '@/components/ui/spinner';
 import AppLayout from '@/layouts/app-layout';
 import tenant from '@/routes/tenant';
-import { type BreadcrumbItem } from '@/types';
+import { Tenant, type BreadcrumbItem } from '@/types';
 import { Head, useForm, usePage } from '@inertiajs/react';
 import { Eye, PenBox, Trash2 } from 'lucide-react';
 import { useState } from 'react';
@@ -24,12 +24,6 @@ const breadcrumbs: BreadcrumbItem[] = [
         href: tenant.index().url,
     },
 ];
-interface Tenant {
-    id: number;
-    school_name: string;
-    address: string;
-    school_email: string;
-}
 
 const emptyForm = { school_name: '', address: '', school_email: '' };
 
@@ -123,8 +117,9 @@ export default function Index() {
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Tenant" />
-            <Card className="mt-6 p-6">
+            <Card className="p-6 border-t-0 rounded-t-none">
                 <div className="mb-4 flex items-center justify-between">
+                    <h3 className='text-xl font-semibold'>School List</h3>
                     <Button onClick={handleOpenAdd} className="cursor-pointer">
                         Add Tenant
                     </Button>
@@ -136,39 +131,44 @@ export default function Index() {
                                 <th>id</th>
                                 <th>school name</th>
                                 <th>address</th>
-                                <th>school_email</th>
-                                <th>aksi</th>
+                                <th>school email</th>
+                                <th className='text-center'>aksi</th>
                             </tr>
                         </thead>
                         <tbody>
                             {tenantList.map((tenant) => (
                                 <tr
                                     key={tenant.id}
-                                    className="border-b last:border-0 hover:bg-gray-50 dark:hover:bg-neutral-700"
+                                    className="border-b last:border-0 hover:bg-gray-50 dark:hover:bg-neutral-700 cursor-pointer capitalize"
+                                    onClick={()=>handleOpenShow(tenant)}
+                                    title='tenant information'
                                 >
                                     <td>{tenant.id}</td>
                                     <td>{tenant.school_name}</td>
                                     <td>{tenant.address}</td>
-                                    <td>{tenant.school_email}</td>
+                                    <td className='lowercase'>{tenant.school_email}</td>
                                     <td>
-                                        <div className="flex items-center gap-3">
+                                        <div className="flex items-center justify-center gap-3">
                                             <Eye
-                                                className="size-[32px] cursor-pointer rounded-sm bg-gray-200 hover:bg-gray-300 dark:bg-gray-800 hover:dark:bg-gray-700 p-1 text-gray-800 dark:text-gray-200"
-                                                onClick={() =>
+                                                className="btn-show"
+                                                onClick={(e) => {
+                                                    e.stopPropagation()
                                                     handleOpenShow(tenant)
-                                                }
+                                                }}
                                             />
                                             <PenBox
-                                                className="size-[32px] cursor-pointer rounded-sm bg-green-300 p-1 text-gray-800"
-                                                onClick={() =>
+                                                className="btn-edit"
+                                                onClick={(e) => {
+                                                    e.stopPropagation()
                                                     handleOpenEdit(tenant)
-                                                }
+                                                }}
                                             />
                                             <Trash2
-                                                className="size-[32px] cursor-pointer rounded-sm bg-red-600 p-1 text-gray-800"
-                                                onClick={() =>
+                                                className="btn-delete"
+                                                onClick={(e) => {
+                                                    e.stopPropagation()
                                                     handelDelete(tenant.id)
-                                                }
+                                                }}
                                             />
                                         </div>
                                     </td>

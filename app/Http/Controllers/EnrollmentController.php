@@ -7,33 +7,45 @@ use App\Models\Enrollment;
 use App\Models\Student;
 use App\Models\Tenant;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class EnrollmentController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
+        $tenant_id = Auth::user()->tenant_id;
+        $enrollments = Enrollment::where('tenant_id', $tenant_id)
+                                    ->with(['tenant:id,school_name',
+                                            'course:id,course_name',
+                                            'student:id,nama_lengkap',
+                                    ])->get();
+        $tenants = Tenant::where('id', $tenant_id)->get(['id', 'school_name']);
+        $courses = Course::where('tenant_id', $tenant_id)->get(['id', 'course_name']);
+        $students =Student::where('tenant_id', $tenant_id)->get(['id', 'nama_lengkap']);
+
+        if(Auth::user()->role === 'super admin'){
+            $enrollments = Enrollment::with([ 'tenant:id,school_name',
+                                              'course:id,course_name',
+                                              'student:id,nama_lengkap',
+                                            ])->get();
+            $tenants = Tenant::get(['id', 'school_name']);
+            $courses = Course::get(['id', 'course_name']);
+            $students =Student::get(['id', 'nama_lengkap']);
+        }
+
         return inertia('Enrollment/Index', [
-            'enrollments' => Enrollment::with(['tenant:id,school_name', 'student:id,nama_lengkap', 'course:id,course_name'])->get(),
-            'tenants' => Tenant::get(['id', 'school_name']),
-            'students' => Student::get(['id', 'nama_lengkap']),
-            'courses' => Course::get(['id', 'course_name']),
+            'tenants' => $tenants,
+            'courses' => $courses,
+            'students' => $students,
+            'enrollments' => $enrollments,
         ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
         //
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         $validate = $request->validate([
@@ -46,40 +58,28 @@ class EnrollmentController extends Controller
         return session()->flash('success', 'Enrollment added succesfully.');
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(string $id)
     {
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(string $id)
     {
         //
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, string $id)
     {
         $validate = $request->validate([
+            'course_id' => 'required|numeric|exists:courses,id',
             'tenant_id' => 'required|numeric|exists:tenants,id',
             'student_id' => 'required|numeric|exists:students,id',
-            'course_id' => 'required|numeric|exists:courses,id',
             'enrollment_date' => 'date'
         ]);
         Enrollment::find($id)->update($validate);
         return session()->flash('success', 'Enrollment updated succesfully.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(string $id)
     {
         Enrollment::findOrFail($id)->delete();

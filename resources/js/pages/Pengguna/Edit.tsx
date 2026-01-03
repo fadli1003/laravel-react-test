@@ -50,7 +50,7 @@ export default function Edit({pengguna}: {pengguna: Pengguna}) {
                               placeholder='Masukkan nama lengkap'
                               value={data.nama}
                               onChange={(e) => setData('nama', e.target.value)}
-                              className='w-full py-1.5 px-3 rounded-lg broder-border border-1 ring-0 focus:ring-0 focus:outline-1'
+                              className='input-create'
                             />
                             {errors.nama && <div className='text-red-500 text-sm mt-1'>{errors.nama}</div>}
                         </div>
@@ -62,7 +62,7 @@ export default function Edit({pengguna}: {pengguna: Pengguna}) {
                               placeholder='Masukkan Email'
                               value={data.email}
                               onChange={(e) => setData('email', e.target.value)}
-                              className='w-full py-1.5 px-3 rounded-lg broder-border border-1 ring-0 focus:ring-0 focus:outline-1'
+                              className='input-create'
                             />
                             {errors.email && <div className='text-red-500 text-sm mt-1'>{errors.email}</div>}
                         </div>
@@ -73,7 +73,7 @@ export default function Edit({pengguna}: {pengguna: Pengguna}) {
                               value={data.pw}
                               onChange={(e) => setData('pw', e.target.value)}
                               autoComplete='none'
-                              className='w-full py-1.5 px-3 rounded-lg broder-border border-1 ring-0 focus:ring-0 focus:outline-1'
+                              className='input-create'
                             />
                             {errors.pw && <div className='text-red-500 text-sm mt-1'>{errors.pw}</div>}
                         </div>

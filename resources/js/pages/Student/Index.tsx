@@ -1,14 +1,11 @@
 import ModalKonfirmasi from '@/components/tambahan/confirm-modal';
 import { Button } from '@/components/ui/button';
 import { Card, CardHeader } from '@/components/ui/card';
-import {
-    Dialog,
-    DialogHeader,
-} from '@/components/ui/dialog';
+import { Dialog, DialogHeader } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import AppLayout from '@/layouts/app-layout';
-import { type BreadcrumbItem } from '@/types';
+import type { BreadcrumbItem, Student, Tenant } from '@/types';
 import { Head, useForm, usePage } from '@inertiajs/react';
 import { DialogContent, DialogTitle } from '@radix-ui/react-dialog';
 import { Eye, Loader2, PenBox, PlusCircle, Trash2 } from 'lucide-react';
@@ -21,19 +18,6 @@ const breadcrumbs: BreadcrumbItem[] = [
         href: route('student.index'),
     },
 ];
-
-interface Tenant {
-    id: number;
-    school_name: string;
-}
-interface Student {
-    id: number;
-    nama_lengkap: string;
-    panggilan: string;
-    grade: string;
-    tenant_id: string;
-    tenant: Tenant | null;
-}
 
 const emptyForm = { nama_lengkap: '', panggilan: '', grade: '', tenant_id: '' };
 type FormState = typeof emptyForm & { id?: number };
@@ -97,12 +81,12 @@ export default function Index() {
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         if (isEdit && form.data.id) {
-            form.put(route('student.update', form.data.id),{
-                onSuccess: handleClose
+            form.put(route('student.update', form.data.id), {
+                onSuccess: handleClose,
             });
         } else if (isAdd) {
-            form.post(route('student.store'),{
-                onSuccess: handleClose
+            form.post(route('student.store'), {
+                onSuccess: handleClose,
             });
         }
     };
@@ -125,7 +109,7 @@ export default function Index() {
             <Card className="relative h-full overflow-hidden rounded-t-none border-t-0 p-6">
                 <CardHeader className="mt-2 mb-4 flex flex-row justify-between px-0">
                     <h2 className="pt-2 text-xl font-semibold">
-                        Students Table
+                        Students List
                     </h2>
                     <Button onClick={handleOpenAdd} className="cursor-pointer">
                         <PlusCircle />
@@ -146,30 +130,38 @@ export default function Index() {
                         </thead>
                         <tbody>
                             {studentsList.map((student) => (
-                                <tr key={student.id}>
+                                <tr
+                                    key={student.id}
+                                    onClick={() => handleOpenShow(student)}
+                                    className="cursor-pointer border-b capitalize last:border-0 hover:bg-gray-50 dark:hover:bg-neutral-700"
+                                >
                                     <td>{student.id}</td>
                                     <td>{student.nama_lengkap}</td>
                                     <td>{student.panggilan}</td>
                                     <td>{student.grade}</td>
                                     <td>{student.tenant?.school_name}</td>
-                                    <td>
-                                        <div className="flex justify-center gap-3">
-                                            <Eye
-                                                size={30}
-                                                onClick={() => handleOpenShow(student)}
-                                                className="cursor-pointer rounded-md bg-slate-200 p-1 hover:bg-slate-300 dark:bg-slate-800 hover:dark:bg-slate-700 duration-200"
-                                                />
-                                            <PenBox
-                                                size={30}
-                                                onClick={() => handleOpenEdit(student)}
-                                                className="cursor-pointer rounded-md bg-green-300 p-1 text-gray-800 duration-200 hover:bg-green-400"
-                                                />
-                                            <Trash2
-                                                size={30}
-                                                onClick={() => handleDelete(student.id)}
-                                                className="cursor-pointer rounded-md bg-red-600 p-1 text-gray-100 duration-200 hover:bg-red-700"
-                                            />
-                                        </div>
+                                    <td className="pointer-events-none flex justify-center gap-3">
+                                        <Eye
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                handleOpenShow(student);
+                                            }}
+                                            className="btn-show"
+                                        />
+                                        <PenBox
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                handleOpenEdit(student);
+                                            }}
+                                            className="btn-edit"
+                                        />
+                                        <Trash2
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                handleDelete(student.id);
+                                            }}
+                                            className="btn-delete"
+                                        />
                                     </td>
                                 </tr>
                             ))}
@@ -178,7 +170,10 @@ export default function Index() {
                 </div>
             </Card>
             <Dialog open={open} onOpenChange={setOpen}>
-                <DialogContent aria-describedby={undefined} className="fixed inset-0 flex h-full w-full items-center justify-center backdrop-blur-[2px]">
+                <DialogContent
+                    aria-describedby={undefined}
+                    className="fixed inset-0 flex h-full w-full items-center justify-center backdrop-blur-[2px]"
+                >
                     <div className="w-[clamp(300px,400px,100%)] rounded-md border bg-background px-8 py-6">
                         <DialogHeader className="mb-5">
                             <DialogTitle className="text-center text-lg font-semibold">
@@ -191,7 +186,10 @@ export default function Index() {
                                         : ''}
                             </DialogTitle>
                         </DialogHeader>
-                        <form onSubmit={handleSubmit} className="space-y-5 form">
+                        <form
+                            onSubmit={handleSubmit}
+                            className="form space-y-5"
+                        >
                             <div className="mt-2 flex flex-col space-y-3">
                                 <Label htmlFor="nama_lengkap">
                                     Student's Full Name
@@ -209,7 +207,11 @@ export default function Index() {
                                     readOnly={isShow}
                                     disabled={isShow}
                                 />
-                                {form.errors.nama_lengkap && <div className='text-red-500 text-sm mt-1'>{form.errors.nama_lengkap}</div>}
+                                {form.errors.nama_lengkap && (
+                                    <div className="mt-1 text-sm text-red-500">
+                                        {form.errors.nama_lengkap}
+                                    </div>
+                                )}
                             </div>
                             <div className="flex flex-col space-y-3">
                                 <Label htmlFor="panggilan">
@@ -228,7 +230,11 @@ export default function Index() {
                                     readOnly={isShow}
                                     disabled={isShow}
                                 />
-                                {form.errors.panggilan && <div className='text-red-500 text-sm mt-1'>{form.errors.panggilan}</div>}
+                                {form.errors.panggilan && (
+                                    <div className="mt-1 text-sm text-red-500">
+                                        {form.errors.panggilan}
+                                    </div>
+                                )}
                             </div>
                             <div className="flex flex-col space-y-3">
                                 <Label htmlFor="grade">Student's Grade</Label>
@@ -242,7 +248,11 @@ export default function Index() {
                                     readOnly={isShow}
                                     disabled={isShow}
                                 />
-                                {form.errors.grade && <div className='text-red-500 text-sm mt-1'>{form.errors.grade}</div>}
+                                {form.errors.grade && (
+                                    <div className="mt-1 text-sm text-red-500">
+                                        {form.errors.grade}
+                                    </div>
+                                )}
                             </div>
                             <div className="flex flex-col space-y-3">
                                 <Label htmlFor="tenant_id">School Name</Label>
@@ -257,41 +267,46 @@ export default function Index() {
                                         )
                                     }
                                     disabled={isShow}
-                                    className="cursor-pointer rounded-md border border-neutral-800 px-3 py-2 text-sm focus:outline-0 accent-accent dark:bg-neutral-950"
-                                    >
-                                    {!isEdit && <option value="">Pilih sekolah</option>}
+                                    className="input-create bg-background dark:text-neutral-300 cursor-pointer"
+                                >
+                                    {!isEdit && (
+                                        <option value="">Pilih sekolah</option>
+                                    )}
                                     {tenants?.map((tenant) => (
                                         <option
-                                        className="text-sm"
-                                        key={tenant.id}
-                                        value={String(tenant.id)}
+                                            className="text-sm"
+                                            key={tenant.id}
+                                            value={String(tenant.id)}
                                         >
                                             {tenant.school_name}
                                         </option>
                                     ))}
                                 </select>
-                                {form.errors.tenant_id && <div className='text-red-500 text-sm mt-1'>{form.errors.tenant_id}</div>}
+                                {form.errors.tenant_id && (
+                                    <div className="mt-1 text-sm text-red-500">
+                                        {form.errors.tenant_id}
+                                    </div>
+                                )}
                             </div>
                             <div className="flex justify-end gap-3">
-                                {(isEdit || isAdd)
-                                    && (
-                                        <Button
-                                            type="submit"
-                                            disabled={form.processing}
-                                            className="cursor-pointer"
-                                        >
-                                            {form.processing
-                                                ? isEdit
+                                {(isEdit || isAdd) && (
+                                    <Button
+                                        type="submit"
+                                        disabled={form.processing}
+                                        className="cursor-pointer"
+                                    >
+                                        {form.processing
+                                            ? isEdit
                                                 ? 'Updating...'
                                                 : 'Saving...'
-                                                : isEdit
-                                                ? 'Update'
-                                                : 'Add'}
-                                            {form.processing && (
-                                                <Loader2 className="w-4 h-4 animate-spin" />
-                                            )}
-                                        </Button>
-                                    )}
+                                            : isEdit
+                                              ? 'Update'
+                                              : 'Add'}
+                                        {form.processing && (
+                                            <Loader2 className="h-4 w-4 animate-spin" />
+                                        )}
+                                    </Button>
+                                )}
                                 <Button
                                     type="button"
                                     variant="outline"

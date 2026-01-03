@@ -47,7 +47,7 @@ export default function Create() {
                                 name='school_name'
                                 value={data.school_name}
                                 onChange={(e) => setData('school_name', e.target.value)}
-                                className='w-full py-1.5 px-3 rounded-md broder-border border-1 ring-0 focus:ring-0 focus:outline-1 focus:outline-gray-300 text-sm'
+                                className='input-create'
                                 />
                                 {errors.school_name && <div className='text-red-500 text-sm mt-1'>{errors.school_name}</div>}
                             </div>
@@ -59,7 +59,7 @@ export default function Create() {
                                 name='address'
                                 value={data.address}
                                 onChange={(e) => setData('address', e.target.value)}
-                                className='w-full py-1.5 px-3 rounded-md broder-border border-1 ring-0 focus:ring-0 focus:outline-1 focus:outline-gray-300 text-sm'
+                                className='input-create'
                                 />
                                 {errors.address && <div className='text-red-500 text-sm mt-1'>{errors.address}</div>}
                             </div>
@@ -71,7 +71,7 @@ export default function Create() {
                                 name='school_email'
                                 value={data.school_email}
                                 onChange={(e) => setData('school_email', e.target.value)}
-                                className='w-full py-1.5 px-3 rounded-md broder-border border-1 ring-0 focus:ring-0 focus:outline-1 focus:outline-gray-300 text-sm'
+                                className='input-create'
                                 />
                                 {errors.school_email && <div className='text-red-500 text-sm mt-1'>{errors.school_email}</div>}
                             </div>

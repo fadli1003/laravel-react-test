@@ -11,6 +11,8 @@ import {
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
 import { dashboard } from '@/routes';
+import course from '@/routes/course';
+import tenant from '@/routes/tenant';
 import { type NavGroup } from '@/types';
 import { Link } from '@inertiajs/react';
 import {
@@ -47,12 +49,12 @@ const mainNavItems: NavGroup[] = [
         items: [
             {
                 title: 'School Information',
-                href: route('tenant.index'),
+                href: tenant.index().url,
                 icon: School,
             },
             {
                 title:'Add New Tenant',
-                href: route('tenant.create'),
+                href: tenant.create().url,
                 icon: Building2,
             }
         ]
@@ -62,12 +64,12 @@ const mainNavItems: NavGroup[] = [
         items: [
             {
                 title: 'Course Information',
-                href: route('course.index'),
+                href: course.index().url,
                 icon: GraduationCap,
             },
             {
                 title: 'Add New Course',
-                href: route('course.create'),
+                href: course.create().url,
                 icon: LibraryBig,
             },
         ],

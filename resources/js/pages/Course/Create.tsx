@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/button';
 import { Spinner } from '@/components/ui/spinner';
 import AppLayout from '@/layouts/app-layout';
-import { type BreadcrumbItem } from '@/types';
+import type { Teacher, Tenant, BreadcrumbItem } from '@/types';
 import { Head, useForm, usePage} from '@inertiajs/react';
 import { route } from 'ziggy-js';
 
@@ -15,14 +15,6 @@ const breadcrumbs: BreadcrumbItem[] = [
         href: route('course.create'),
     },
 ];
-interface Tenant {
-    id: number
-    school_name: string
-}
-interface Teacher {
-    id: number
-    nama_lengkap: string
-}
 
 export default function Create() {
 
@@ -57,7 +49,8 @@ export default function Create() {
                                 name='course_name'
                                 value={data.course_name}
                                 onChange={(e) => setData('course_name', e.target.value)}
-                                className='w-full py-1.5 px-3 rounded-md broder-border border-1 ring-0 focus:ring-0 focus:outline-1 focus:outline-gray-300 text-sm'
+                                className='input-create'
+                                placeholder='e.g Web developer'
                                 />
                                 {errors.course_name && <div className='text-red-500 text-sm mt-1'>{errors.course_name}</div>}
                             </div>
@@ -68,7 +61,7 @@ export default function Create() {
                                     name='tenant_id'
                                     value={data.tenant_id}
                                     onChange={(e) => setData('tenant_id', e.target.value)}
-                                    className='w-full py-1.5 px-3 rounded-md broder-border bg-background border-1 ring-0 focus:ring-0 focus:outline-1 focus:outline-gray-300 text-sm'
+                                    className='input-create input-select'
                                 >
                                     <option value=''>Choose School Name</option>
                                     {tenants?.map((tenant) => (
@@ -85,7 +78,7 @@ export default function Create() {
                                     value={data.teacher_id}
                                     onChange={(e) => setData('teacher_id', e.target.value)}
                                     autoComplete='none'
-                                    className='w-full py-1.5 px-3 rounded-md bg-background broder-border border-1 ring-0 focus:ring-0 focus:outline-1 focus:outline-gray-300 text-sm'
+                                    className='input-create input-select'
                                 >
                                     <option value="">Choose Teacher's Name</option>
                                     {teachers?.map((teacher) => (
@@ -99,8 +92,8 @@ export default function Create() {
                             {processing
                                 ? (
                                     <>
-                                        Saving...
                                         <Spinner/>
+                                        Saving...
                                     </>
                                 )
                                 : 'Save'

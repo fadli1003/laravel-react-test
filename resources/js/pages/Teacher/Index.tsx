@@ -10,7 +10,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import AppLayout from '@/layouts/app-layout';
-import { type BreadcrumbItem } from '@/types';
+import type { BreadcrumbItem, Tenant } from '@/types';
 import { Head, router, usePage } from '@inertiajs/react';
 import { Eye, PenBox, PlusCircle, Trash2 } from 'lucide-react';
 import { useState } from 'react';
@@ -22,18 +22,16 @@ const breadcrumbs: BreadcrumbItem[] = [
         href: route('teacher.index'),
     },
 ];
-interface Tenant {
-    id: number;
-    school_name: string;
-}
+
 interface Teacher {
     id: number;
-    tenant_id: string;
     nama_lengkap: string;
     panggilan: string;
     subject: string;
     tenant: Tenant | null;
+    tenant_id: string;
 }
+
 interface FormErrors {
     nama_lengkap?: string;
     panggilan?: string;
@@ -53,7 +51,7 @@ export default function Index() {
         teachers?: Teacher[];
         tenants?: Tenant[];
         sukses?: string;
-        errors?: FormErrors[];
+        errors?: FormErrors;
     }>().props;
     const teacherList = teachers ?? [];
 
@@ -84,7 +82,7 @@ export default function Index() {
         });
         setIsEdit(true);
         setOpen(true);
-        setIsShow(false)
+        setIsShow(false);
     };
 
     const handleShow = (teacher: Teacher) => {
@@ -99,7 +97,7 @@ export default function Index() {
         setIsShow(true);
         setIsAdd(false);
         setIsEdit(false);
-    }
+    };
     const handleClose = () => {
         setOpen(false);
         setForm(emptyForm);
@@ -123,7 +121,7 @@ export default function Index() {
         if (isEdit && form.id) {
             router.put(route('teacher.update', form.id), form, {
                 onSuccess: handleClose,
-                preserveScroll : true //to make scroll position base on page before request run
+                preserveScroll: true, //to make scroll position base on page before request run
             });
         } else {
             router.post(route('teacher.store'), form, {
@@ -148,7 +146,7 @@ export default function Index() {
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Teacher" />
-            <Card className="h-full rounded-t-none border-t-0 py-5 px-7">
+            <Card className="h-full rounded-t-none border-t-0 px-7 py-5">
                 <div className="flex items-center justify-between">
                     <h2 className="text-lg font-semibold max-sm:text-center">
                         Teachers List
@@ -174,32 +172,36 @@ export default function Index() {
                             {teacherList.map((teacher, i) => (
                                 <tr
                                     key={i}
-                                    className="border-b last:border-0 hover:bg-gray-50 dark:hover:bg-neutral-700 capitalize"
+                                    onClick={() => handleShow(teacher)}
+                                    className="border-b capitalize last:border-0 hover:bg-gray-50 dark:hover:bg-neutral-700"
                                 >
                                     <td>{teacher.id}</td>
                                     <td>{teacher.nama_lengkap}</td>
                                     <td>{teacher.panggilan}</td>
                                     <td>{teacher.subject}</td>
                                     <td>{teacher.tenant?.school_name}</td>
-                                    <td>
-                                        <div className="flex items-center justify-center gap-3">
-                                            <Eye
-                                                className="size-8 cursor-pointer rounded-md bg-slate-200 p-1 hover:bg-slate-300 dark:bg-slate-800 hover:dark:bg-slate-700"
-                                                onClick={() => handleShow(teacher)}
-                                            />
-                                            <PenBox
-                                                className="size-8 cursor-pointer rounded-sm bg-green-300 p-1 text-gray-800 hover:bg-green-400"
-                                                onClick={() =>
-                                                    handleOpenEdit(teacher)
-                                                }
-                                            />
-                                            <Trash2
-                                                className="size-[32px] cursor-pointer rounded-sm bg-red-600 p-1 text-gray-100 hover:bg-red-700"
-                                                onClick={() =>
-                                                    handelDelete(teacher.id)
-                                                }
-                                            />
-                                        </div>
+                                    <td className="pointer-events-none flex items-center justify-center gap-3">
+                                        <Eye
+                                            className="btn-show"
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                handleShow(teacher);
+                                            }}
+                                        />
+                                        <PenBox
+                                            className="btn-edit"
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                handleOpenEdit(teacher);
+                                            }}
+                                        />
+                                        <Trash2
+                                            className="btn-delete"
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                handelDelete(teacher.id);
+                                            }}
+                                        />
                                     </td>
                                 </tr>
                             ))}
@@ -208,7 +210,7 @@ export default function Index() {
                 </div>
             </Card>
             <Dialog open={open} onOpenChange={setOpen}>
-                <DialogContent aria-describedby={undefined}>
+                <DialogContent aria-describedby={undefined} className='px-10 py-8'>
                     <DialogHeader>
                         <DialogTitle>
                             {isEdit ? 'Update Teacher' : 'Add Teacher'}
@@ -222,7 +224,7 @@ export default function Index() {
                                 name="nama_lengkap"
                                 value={form.nama_lengkap}
                                 onChange={handleChange}
-                                className='capitalize'
+                                className="capitalize"
                                 disabled={isShow}
                             />
                             {errors.nama_lengkap && (
@@ -239,7 +241,7 @@ export default function Index() {
                                 value={form.panggilan}
                                 onChange={handleChange}
                                 disabled={isShow}
-                                className='capitalize'
+                                className="capitalize"
                             />
                             {errors.panggilan && (
                                 <div className="mt-1 text-sm text-red-500">
@@ -254,7 +256,7 @@ export default function Index() {
                                 name="subject"
                                 value={form.subject}
                                 onChange={handleChange}
-                                className='capitalize'
+                                className="capitalize"
                                 disabled={isShow}
                             />
                             {errors.subject && (
@@ -271,9 +273,11 @@ export default function Index() {
                                 value={form.tenant_id}
                                 onChange={handleChange}
                                 disabled={isShow}
-                                className="w-full cursor-pointer rounded-md border border-neutral-300 px-3 py-2 text-sm focus:outline-1 dark:border-neutral-800 dark:bg-neutral-950 capitalize disabled:text-muted-foreground disabled:cursor-auto"
+                                className="input-create"
                             >
-                                {!isEdit && <option value=''>--Choose School--</option>}
+                                {!isEdit && (
+                                    <option value="">--Choose School--</option>
+                                )}
                                 {tenants?.map((tenant) => (
                                     <option key={tenant.id} value={tenant.id}>
                                         {tenant.school_name}
@@ -288,7 +292,10 @@ export default function Index() {
                         </div>
                         <div className="flex justify-end gap-3">
                             {(isEdit || isAdd) && (
-                                <Button type="submit" className="cursor-pointer">
+                                <Button
+                                    type="submit"
+                                    className="cursor-pointer"
+                                >
                                     {isEdit ? 'Update' : 'Add'}
                                 </Button>
                             )}
